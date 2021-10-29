@@ -7,6 +7,8 @@ bookName varchar(255) not null,
 quantity int
 );
 
+alter table bookinventory add image blob;
+
 create table orders(
 orderId int auto_increment primary key,
 firstName varchar(255),
