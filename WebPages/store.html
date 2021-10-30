@@ -1,12 +1,10 @@
 <?php
+require("mysqli_connect.php");
+
+$q = "SELECT * FROM bookInventory";
+$r = mysqli_query($dbc, $q);
 
 ?>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <title>Book Inventory</title>
@@ -16,5 +14,18 @@
         <a href="store.html">Store</a> | 
         <a href="checkout.html">checkout</a>
     </nav>
+    <h2>welcome</h2>
+
+    <div>
+        <?php
+        while($row = mysql_fetch_array($r)){
+        ?>
+        <h2><?php 
+            echo $row['bookName'];
+            ?>
+        </h2>
+        <?php } ?>
+    </div>
+
 </body>
 </html>
