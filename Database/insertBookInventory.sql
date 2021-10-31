@@ -4,3 +4,7 @@ INSERT INTO bookInventory VALUES
 (null, 'PHP', 8),
 (null, 'Rich Dad Poor Dad', 12),
 (null, 'The everyday hero manifesto', 9);
+
+
+INSERT INTO bookinventory VALUES
+(null, 'As a Man Thinketh', 20);
