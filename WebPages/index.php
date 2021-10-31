@@ -20,7 +20,7 @@
         //echo "<div class='card'>";
         //echo "<div class='card-body'>";
         echo "<h5>" . $row['bookId'] . "</h5>";
-        echo "<h5 class='card-title'><a href='checkout.php'>" . $row['bookName'] . "</a></h5>";
+        echo "<h5 class='card-title'><a href='checkout.php?bookId={$row['bookId']}'>" . $row['bookName'] . "</a></h5>";
     }
     ?>
     </div>
