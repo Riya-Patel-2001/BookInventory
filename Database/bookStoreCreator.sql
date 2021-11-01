@@ -4,7 +4,10 @@ use bookStore;
 create table bookInventory(
 bookId int auto_increment primary key,
 bookName varchar(255) not null,
-quantity int
+authorName varchar(255) not null,
+quantity int,
+price int not null,
+img blob
 );
 
 drop table bookinventory;
@@ -16,3 +19,4 @@ lastName varchar(255),
 paymentType varchar(255),
 book_purchased int
 );
+alter table orders add email varchar(255);

@@ -1,7 +1,9 @@
 <?php
+//connecting to SQL
 require("mysqli_connect.php");
 session_start();
 
+//using $_GET to check if we are receiving bookId or not 
 if (!isset($_GET["bookId"])) {
     if (!$_SESSION["bookId"]) {
         echo "<br>Book id is not set.<br>";
@@ -10,9 +12,11 @@ if (!isset($_GET["bookId"])) {
     $_SESSION["bookId"] =  $_GET["bookId"];
 }
 
+//to check we have received data from form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $check = TRUE;
 
+    //put validation for all fields of form
     if (empty($_POST['firstname'])) {
         $check = FALSE;
         echo "Please enter firstname.";
@@ -27,6 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $lastname = mysqli_real_escape_string($dbc, $_POST['lastname']);
     }
 
+    if (empty($_POST['email'])) {
+        $check = FALSE;
+        echo "Please enter email.";
+    } else {
+        $lastname = mysqli_real_escape_string($dbc, $_POST['email']);
+    }
+
     if (isset($_POST['payment'])) {
         $payment =  mysqli_real_escape_string($dbc, $_POST['payment']);
     } else {
@@ -34,8 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Please select payment method.";
     }
     if ($check == TRUE) {
+        //using intval to convert session id to int 
         $id = intval($_SESSION['bookId']);
 
+        //write insert query to add data from checkout form to SQL database
         $placeOrder = "INSERT INTO orders (`firstName`,`lastName`,`paymentType`,`book_purchased`)
         VALUES 
         ('{$_POST['firstname']}',
@@ -44,9 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         '{$id}')";
         $bookOrder = @mysqli_query($dbc, $placeOrder);
 
-        header("location:store.php");
-        echo "Your order has been placed.";
+        //to redirect to other page
+        header("location:confirm.php");
 
+        //write update query to after placing order change the quantity of book
         $updateData = "UPDATE bookInventory SET quantity = quantity - 1 WHERE bookId={$id}";
         $updateBooks = mysqli_query($dbc, $updateData);
 
@@ -67,20 +81,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
-<body>
-    <form action="checkout.php" method="POST">
-        <p>First Name: <input type="text" name="firstname"></p>
+<body style="background-color:khaki">
+    <br><br>
+    <form action="checkout.php" method="POST" style="margin:auto;width:50%;margin-top:20px;padding:20px">
+        <div class="form-group row">
+            <label for="firstname" class="col-sm-2 col-form-label">FirstName</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="" name="Fname" placeholder="First name">
+            </div>
+        </div>
+        <br>
+        <div class="form-group row">
+            <label for="lastname" class="col-sm-2 col-form-label">LastName</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="" name="Lname" placeholder="Last name">
+            </div>
+        </div>
+        <br>
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="" name="Email" placeholder="Email">
+            </div>
+        </div>
+        <br>
+        <div class="form-group row">
+            <label for="payment" class="col-sm-2 col-form-label">Payment Type</label>
+            <div class="col-sm-10">
+                <input type="radio" name="payment" value="creditcard">
+                Credit card
+                <input type="radio" name="payment" value="gogglepay">
+                Google Pay
+            </div>
+        </div>
+        <br>
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10 text-center">
+                <input type="submit" value="Place order" name="submit" class="btn btn-primary" />
+            </div>
+        </div>
 
-        <p>Last Name: <input type="text" name="lastname"></p>
-
-        <p><label for="payment">Payment Options:</label>
-            <input type="radio" name="payment" value="creditcard">
-            Credit card
-            <input type="radio" name="payment" value="gogglepay">
-            Google Pay
-        </p>
-
-        <p><input type="submit" name="submit" value="Place order"></p>
 
     </form>
 </body>
